@@ -242,19 +242,23 @@ footer {
   transform: translateY(-10px);
   box-shadow: 0 30px 80px rgba(0,0,0,0.5);
 }
-
-/* MOBILE */
-@media (max-width: 768px) {
-  html, body {
-    overflow-x: hidden;
-  }
-
+/* MOBILE FIX */
+@media (max-width: 480px) {
   .nav {
-    flex-wrap: nowrap !important; /* FIX: prevent dropping below logo */
-    align-items: center;
+    padding: 1rem 1rem;
   }
 
   .nav ul {
-    flex-wrap: nowrap !important; /* FIX: prevent wrapping links */
+    gap: 0.8rem;      /* smaller spacing between links */
+    flex-wrap: wrap;   /* allow links to move to next line */
+    justify-content: flex-end;
+  }
+
+  .nav a {
+    font-size: 0.75rem; /* shrink font for small screens */
+  }
+
+  .nav .logo {
+    font-size: 1.1rem;  /* smaller logo text */
   }
 }
