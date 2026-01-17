@@ -1,21 +1,62 @@
 gsap.registerPlugin(ScrollTrigger);
 
 /* ======================
-   LOADER
+   SAFE GLOBAL LOADER
 ====================== */
-window.addEventListener("load", () => {
+(() => {
   const loader = document.getElementById("loader");
-  gsap.to(loader, {
-    opacity: 0,
-    duration: 0.6,
-    onComplete: () => {
-      loader.remove();
-      document.body.classList.add("loaded");
+  if (!loader) {
+    window.addEventListener("load", initSite);
+    return;
+  }
+
+  document.documentElement.classList.add("loading");
+  document.body.classList.add("loading");
+
+  let exited = false;
+
+  function exitLoader() {
+    if (exited) return;
+    exited = true;
+
+    gsap.to(loader, {
+      opacity: 0,
+      duration: 0.6,
+      ease: "power2.out",
+      onComplete() {
+        loader.remove();
+        unlock();
+        initSite();
+      }
+    });
+  }
+
+  function unlock() {
+    document.documentElement.classList.remove("loading");
+    document.body.classList.remove("loading");
+  }
+
+  // wait for full page load (IMPORTANT for cursor + GSAP)
+  window.addEventListener("load", () => {
+    setTimeout(exitLoader, 300);
+  });
+
+  // hard failsafe
+  setTimeout(exitLoader, 3500);
+
+  // back/forward cache fix
+  window.addEventListener("pageshow", e => {
+    if (e.persisted) {
+      unlock();
+      loader?.remove();
       initSite();
     }
   });
-});
+})();
 
+/* ======================
+   SITE INIT (AFTER LOAD)
+====================== */
 function initSite() {
   initLenis();
   initGSAP();
@@ -26,9 +67,10 @@ function initSite() {
    LENIS
 ====================== */
 function initLenis() {
-  if (!window.Lenis) return;
+  if (!window.Lenis || window.innerWidth < 768) return;
 
   const lenis = new Lenis({ lerp: 0.08 });
+
   function raf(time) {
     lenis.raf(time);
     requestAnimationFrame(raf);
@@ -37,7 +79,7 @@ function initLenis() {
 }
 
 /* ======================
-   GSAP
+   GSAP ANIMATIONS
 ====================== */
 function initGSAP() {
   gsap.from(".hero h1", {
@@ -67,26 +109,43 @@ function initGSAP() {
 }
 
 /* ======================
-   CURSOR (STABLE)
+   CURSOR (FIXED)
 ====================== */
 function initCursor() {
   if ("ontouchstart" in window) return;
 
   const cursor = document.querySelector(".cursor");
   const follower = document.querySelector(".cursor-follower");
+  if (!cursor || !follower) return;
 
-  let x = 0, y = 0, fx = 0, fy = 0;
+  let mouseX = 0, mouseY = 0;
+  let posX = 0, posY = 0;
 
   window.addEventListener("mousemove", e => {
-    x = e.clientX;
-    y = e.clientY;
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+    cursor.style.transform =
+      `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
   });
 
   gsap.ticker.add(() => {
-    fx += (x - fx) * 0.15;
-    fy += (y - fy) * 0.15;
+    posX += (mouseX - posX) * 0.12;
+    posY += (mouseY - posY) * 0.12;
 
-    cursor.style.transform = `translate(${x}px, ${y}px)`;
-    follower.style.transform = `translate(${fx}px, ${fy}px)`;
+    follower.style.transform =
+      `translate(${posX}px, ${posY}px) translate(-50%, -50%)`;
+  });
+
+  document.querySelectorAll("a, button, .product-card, .card").forEach(el => {
+
+    el.addEventListener("mouseenter", () => {
+      follower.style.transform += " scale(1.6)";
+    });
+
+    el.addEventListener("mouseleave", () => {
+      follower.style.transform =
+        `translate(${posX}px, ${posY}px) translate(-50%, -50%)`;
+    });
   });
 }

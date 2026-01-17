@@ -12,12 +12,15 @@
   <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1/bundled/lenis.min.js"></script>
 </head>
-<body>
-<div id="loader"><div class="loader-logo">BLOOPIX</div></div>
+
+<body class="loading">
+
+<div id="loader">
+  <div class="loader-logo">BLOOPIX</div>
+</div>
 
 <div class="cursor"></div>
 <div class="cursor-follower"></div>
-
 
 <nav class="nav">
   <div class="logo">BLOOPIX</div>
@@ -37,17 +40,13 @@
 <section class="section">
   <h2 class="section-title">Featured Stickers</h2>
 
-  <!-- Store Preview Launch Label -->
-  <p class="shop-preview">
-    Store preview — designs launching soon.
-  </p>
+  <p class="shop-preview">Store preview — designs launching soon.</p>
 
   <div class="grid">
     <div class="product-card">
       <img src="https://picsum.photos/400/300?1">
       <h3>Abstract Flow</h3>
       <div class="price">₹199</div>
-      <!-- Subtle badge -->
       <span class="preview-badge">Available soon</span>
     </div>
 
@@ -66,21 +65,72 @@
     </div>
   </div>
 </section>
-<!-- Notify Me on Launch -->
+
 <section class="notify-section">
   <h3>Be the first to know!</h3>
   <p>Enter your email and we’ll notify you when our store launches.</p>
-  
+
   <form class="notify-form" action="https://formspree.io/f/mnjjjqpb" method="POST">
     <input type="email" name="email" placeholder="Your email address" required>
-    <input type="hidden" name="_redirect" value="thankyou.html">
     <button type="submit">Notify Me</button>
   </form>
 </section>
 
-
 <footer>© 2026 Bloopix Studio</footer>
-<script src="assets/js/main.js"></script>
-</body>
+<script>
+(() => {
+  const isHome =
+    location.pathname === "/" ||
+    location.pathname.endsWith("index.html");
 
+  if (!isHome) return;
+
+  const loader = document.getElementById("loader");
+  if (!loader) return;
+
+  const visited = sessionStorage.getItem("homeVisited");
+
+  // Lock scroll while loader is visible
+  document.documentElement.classList.add("loading");
+  document.body.classList.add("loading");
+
+  window.addEventListener("load", () => {
+
+    // If already visited → remove immediately
+    if (visited) {
+      loader.remove();
+      document.documentElement.classList.remove("loading");
+      document.body.classList.remove("loading");
+      safeInit();
+      return;
+    }
+
+    // First visit animation
+    gsap.to(loader, {
+      opacity: 0,
+      duration: 0.7,
+      ease: "power2.out",
+      delay: 0.6,
+      onComplete: () => {
+        loader.remove();
+        sessionStorage.setItem("homeVisited", "true");
+        document.documentElement.classList.remove("loading");
+        document.body.classList.remove("loading");
+        safeInit();
+      }
+    });
+  });
+
+  function safeInit() {
+    if (window.initLenis) initLenis();
+    if (window.initGSAP) initGSAP();
+    if (window.initCursor) initCursor();
+  }
+})();
+</script>
+
+
+<script src="assets/js/main.js"></script>
+
+</body>
 </html>
