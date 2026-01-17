@@ -321,3 +321,58 @@ footer {
     padding: 4rem 1.5rem;
   }
 }
+/* MOBILE NAV FIX */
+@media (max-width: 768px) {
+  .nav {
+    flex-wrap: wrap;           /* allow logo and links to wrap */
+    padding: 1rem 1.25rem;
+    justify-content: flex-start; /* align left on mobile */
+    gap: 0.75rem;
+  }
+
+  .nav .logo {
+    margin-bottom: 0.5rem;     /* space below logo */
+    font-size: 1.4rem;
+    flex: 0 0 100%;             /* logo takes full width first row */
+  }
+
+  .nav ul {
+    flex: 1 1 100%;             /* links take next row */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: flex-start;
+  }
+
+  .nav a {
+    font-size: 0.85rem;
+  }
+
+  /* optional: fix “Soon” label alignment */
+  .nav a span {
+    font-size: 0.7rem;
+    vertical-align: top;
+    margin-left: 2px;
+  }
+}
+@media (max-width: 768px) {
+  .nav {
+    flex-wrap: nowrap;         /* force one line */
+    justify-content: space-between;
+    padding: 1rem 1rem;
+  }
+
+  .nav .logo {
+    font-size: 1.3rem;         /* smaller logo */
+  }
+
+  .nav ul {
+    gap: 0.6rem;               /* smaller space between links */
+    flex-wrap: nowrap;
+  }
+
+  .nav a {
+    font-size: 0.8rem;         /* smaller text to fit */
+  }
+}
+
