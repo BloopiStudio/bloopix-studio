@@ -162,6 +162,7 @@ body.loading {
   color: #aaa;
   margin-bottom: 1.6rem;
 }
+
 .notify-form {
   display: flex;
   justify-content: center;
@@ -199,20 +200,7 @@ footer {
   color: #777;
 }
 
-/* MOBILE */
-@media (max-width: 768px) {
-  .hero {
-    padding: 6rem 1.5rem;
-  }
-
-  .section {
-    padding: 4rem 1.5rem;
-  }
-
-  .notify-section {
-    margin: 2rem 1rem;
-  }
-}
+/* CURSOR */
 .cursor,
 .cursor-follower {
   position: fixed;
@@ -229,6 +217,7 @@ footer {
   width: 8px;
   height: 8px;
   background: white;
+  mix-blend-mode: difference;
 }
 
 .cursor-follower {
@@ -236,29 +225,23 @@ footer {
   height: 32px;
   border: 1px solid rgba(255,255,255,0.35);
   transition: transform 0.15s ease-out;
-}
-.cursor {
   mix-blend-mode: difference;
 }
 
-.cursor-follower {
-  mix-blend-mode: difference;
+/* GENERIC CARD (About & Contact) */
+.card {
+  background: #141416;
+  border-radius: 20px;
+  padding: 2rem;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
-@media (max-width: 768px) {
-  .notify-section {
-    margin: 3rem 1rem;
-    padding: 2.5rem 1.5rem;
-  }
 
-  .notify-form {
-    flex-direction: column;
-  }
-
-  .notify-form input,
-  .notify-form button {
-    width: 100%;
-  }
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5);
 }
+
+/* MOBILE */
 @media (max-width: 768px) {
   html, body {
     overflow-x: hidden;
@@ -266,6 +249,29 @@ footer {
 
   .nav {
     padding: 1rem 1.25rem;
+    flex-wrap: wrap; /* allow logo and links to wrap */
+  }
+
+  .nav .logo {
+    margin-right: 1rem; /* space between logo and first link */
+    font-size: 1.4rem;
+  }
+
+  .nav ul {
+    flex-wrap: wrap;      /* links can wrap */
+    gap: 1rem;
+    justify-content: flex-start; /* align links under logo */
+    margin-top: 0.5rem;
+  }
+
+  .nav a {
+    font-size: 0.85rem;
+  }
+
+  .nav a .nav-soon {
+    font-size: 0.7rem;
+    margin-left: 2px;
+    vertical-align: top;
   }
 
   .hero {
@@ -289,23 +295,29 @@ footer {
     padding: 1.5rem;
   }
 
+  .notify-section {
+    margin: 3rem 1rem;
+    padding: 2.5rem 1.5rem;
+  }
+
+  .notify-form {
+    flex-direction: column;
+  }
+
+  .notify-form input,
+  .notify-form button {
+    width: 100%;
+  }
+
   footer {
     padding: 2rem 1rem;
   }
-}
-html.loading,
-body.loading {
-  overflow: hidden;
-}
-/* GENERIC CARD (About & Contact) */
-.card {
-  background: #141416;
-  border-radius: 20px;
-  padding: 2rem;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-}
 
-.card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  .hero {
+    padding: 6rem 1.5rem;
+  }
+
+  .section {
+    padding: 4rem 1.5rem;
+  }
 }
