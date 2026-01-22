@@ -41,43 +41,83 @@
 <section class="section">
   <h2 class="section-title">Featured Stickers</h2>
 
-  <p class="shop-preview">Store preview — designs launching soon.</p>
+  <p class="shop-preview">Explore our designs — click to visit our shop.</p>
 
   <div class="grid">
-    <div class="product-card">
-      <img src="https://picsum.photos/400/300?1">
-      <h3>Abstract Flow</h3>
-      <div class="price">₹199</div>
-      <span class="preview-badge">Available soon</span>
-    </div>
+    <!-- CARD 1 -->
+    <a href="shop.html" class="product-card-link">
+      <div class="product-card">
+        <img src="assets/images/Store/surf.png" alt="Surf More, Worry Less">
+        <h3>Surf More, Worry Less</h3>
+        <div class="view-btn">Visit Shop</div>
+      </div>
+    </a>
 
-    <div class="product-card">
-      <img src="https://picsum.photos/400/300?2">
-      <h3>Neon Face</h3>
-      <div class="price">₹249</div>
-      <span class="preview-badge">Available soon</span>
-    </div>
+    <!-- CARD 2 -->
+    <a href="shop.html" class="product-card-link">
+      <div class="product-card">
+        <img src="assets/images/Store/free sprit.png" alt="Free Spirit Girl in Car">
+        <h3>Free Spirit Girl in Car</h3>
+        <div class="view-btn">Visit Shop</div>
+      </div>
+    </a>
 
-    <div class="product-card">
-      <img src="https://picsum.photos/400/300?3">
-      <h3>Minimal Eye</h3>
-      <div class="price">₹179</div>
-      <span class="preview-badge">Available soon</span>
-    </div>
+    <!-- CARD 3 -->
+    <a href="shop.html" class="product-card-link">
+      <div class="product-card">
+        <img src="assets/images/Store/oops.png" alt="Oops… Magic! – Cute Witch Aesthetic">
+        <h3>Oops… Magic! – Cute Witch Aesthetic</h3>
+        <div class="view-btn">Visit Shop</div>
+      </div>
+    </a>
   </div>
 </section>
 
-<section class="notify-section">
-  <h3>Be the first to know!</h3>
-  <p>Enter your email and we’ll notify you when our store launches.</p>
 
-  <form class="notify-form" action="https://formspree.io/f/mnjjjqpb" method="POST">
-    <input type="email" name="email" placeholder="Your email address" required>
-    <button type="submit">Notify Me</button>
-  </form>
-</section>
+<footer>
+  <div class="footer-container">
 
-<footer>© 2026 Bloopix Studio</footer>
+    <!-- Request a Custom Sticker Card -->
+    <div class="footer-card">
+      <h3>Request a Custom Sticker</h3>
+      <p>Have an idea? Share it with us and we might turn it into a unique design!</p>
+      <form class="footer-request-form" action="https://formspree.io/f/mnjjjqpb" method="POST">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <input type="text" name="idea" placeholder="Your Sticker Idea" required>
+        <button type="submit">Send Request</button>
+      </form>
+    </div>
+
+    <!-- Social Links Card -->
+  <div class="footer-card">
+    <h3>Follow Us</h3>
+    <p>Stay updated with our latest designs and launches.</p>
+    <div class="social-links-grid">
+     <a href="https://www.instagram.com/yourhandle" target="_blank" class="social-btn">
+      <img src="assets/images/footer/http.svg" alt="Internet">
+      <span>Bloopix</span>
+     </a>
+     <a href="https://www.facebook.com/yourhandle" target="_blank" class="social-btn">
+      <img src="assets/images/footer/pintrest.svg" alt="Pintrest">
+      <span>Pintrest</span>
+     </a>
+     <a href="https://www.redbubble.com/people/yourhandle/shop" target="_blank" class="social-btn">
+      <img src="assets/images/footer/redbubble.svg" alt="Redbubble">
+      <span>Redbubble</span>
+     </a>
+   </div>
+  </div>
+
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 Bloopix Studio. All rights reserved.</p>
+  </div>
+</footer>
+
+
 <script>
 (() => {
   const isHome =

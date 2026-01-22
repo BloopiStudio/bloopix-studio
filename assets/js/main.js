@@ -1,17 +1,27 @@
+/* ======================
+   GSAP REGISTER
+====================== */
 gsap.registerPlugin(ScrollTrigger);
 
 /* ======================
-   SAFE GLOBAL LOADER
+   GLOBAL STATE
+====================== */
+let siteInitialized = false;
+let lenisInstance = null;
+let cursorInitialized = false;
+
+/* ======================
+   GLOBAL LOADER (SAFE)
 ====================== */
 (() => {
   const loader = document.getElementById("loader");
+
   if (!loader) {
-    window.addEventListener("load", initSite);
+    window.addEventListener("load", initSiteOnce);
     return;
   }
 
-  document.documentElement.classList.add("loading");
-  document.body.classList.add("loading");
+  lockScroll();
 
   let exited = false;
 
@@ -25,98 +35,142 @@ gsap.registerPlugin(ScrollTrigger);
       ease: "power2.out",
       onComplete() {
         loader.remove();
-        unlock();
-        initSite();
+        unlockScroll();
+        initSiteOnce();
+        ScrollTrigger.refresh(true);
       }
     });
   }
 
-  function unlock() {
-    document.documentElement.classList.remove("loading");
-    document.body.classList.remove("loading");
-  }
-
-  // wait for full page load (IMPORTANT for cursor + GSAP)
   window.addEventListener("load", () => {
     setTimeout(exitLoader, 300);
   });
 
-  // hard failsafe
+  ScrollTrigger.config({
+    autoRefreshEvents: "visibilitychange,DOMContentLoaded,load"
+  });
+
+  // Hard failsafe
   setTimeout(exitLoader, 3500);
 
-  // back/forward cache fix
+  // Back/forward cache fix
   window.addEventListener("pageshow", e => {
     if (e.persisted) {
-      unlock();
+      unlockScroll();
       loader?.remove();
-      initSite();
+      initSiteOnce();
+      ScrollTrigger.refresh(true);
     }
   });
+
+  function lockScroll() {
+    document.documentElement.classList.add("loading");
+    document.body.classList.add("loading");
+  }
+
+  function unlockScroll() {
+    document.documentElement.classList.remove("loading");
+    document.body.classList.remove("loading");
+  }
 })();
 
 /* ======================
-   SITE INIT (AFTER LOAD)
+   INIT SITE (ONCE)
 ====================== */
-function initSite() {
+function initSiteOnce() {
+  if (siteInitialized) return;
+  siteInitialized = true;
+
   initLenis();
   initGSAP();
   initCursor();
 }
 
 /* ======================
-   LENIS
+   LENIS (SMOOTH SCROLL)
 ====================== */
 function initLenis() {
-  if (!window.Lenis || window.innerWidth < 768) return;
+  if (!window.Lenis) return;
+  if (window.innerWidth < 768) return;
+  if (lenisInstance) return;
 
-  const lenis = new Lenis({ lerp: 0.08 });
+  lenisInstance = new Lenis({
+    lerp: 0.07,          // instant response
+    smoothWheel: true,
+    smoothTouch: false
+  });
 
-  function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-  }
-  requestAnimationFrame(raf);
+  gsap.ticker.add((time) => {
+    lenisInstance.raf(time * 1000);
+  });
+
+  gsap.ticker.lagSmoothing(0);
+
+  lenisInstance.on("scroll", ScrollTrigger.update);
+
+  ScrollTrigger.refresh();
 }
 
 /* ======================
    GSAP ANIMATIONS
 ====================== */
 function initGSAP() {
+
+  // HERO (LOAD ANIMATION)
   gsap.from(".hero h1", {
-    y: 80,
-    opacity: 0,
-    duration: 1,
+    y: 60,
+    duration: 0.9,
     ease: "power3.out"
   });
 
   gsap.from(".hero p", {
-    y: 40,
-    opacity: 0,
-    delay: 0.2,
-    duration: 1
+    y: 30,
+    delay: 0.15,
+    duration: 0.9,
+    ease: "power3.out"
   });
 
+  // PRODUCT GRID (VISIBLE IMMEDIATELY)
+  gsap.utils.toArray(".product-card").forEach(card => {
+    gsap.from(card, {
+      y: 40,
+      duration: 0.6,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: card,
+        start: "top 85%",
+        once: true   // ensures instant appearance without repaint delay
+      }
+    });
+  });
+
+  // OTHER SECTIONS
   gsap.utils.toArray(".section").forEach(section => {
     gsap.from(section, {
-      y: 60,
-      opacity: 0,
+      y: 50,
+      duration: 0.7,
+      ease: "power2.out",
       scrollTrigger: {
         trigger: section,
-        start: "top 80%"
+        start: "top 80%",
+        once: true
       }
     });
   });
 }
 
 /* ======================
-   CURSOR (FIXED)
+   CURSOR (OPTIMIZED)
 ====================== */
 function initCursor() {
   if ("ontouchstart" in window) return;
+  if (cursorInitialized) return;
 
   const cursor = document.querySelector(".cursor");
   const follower = document.querySelector(".cursor-follower");
   if (!cursor || !follower) return;
+
+  cursorInitialized = true;
 
   let mouseX = 0, mouseY = 0;
   let posX = 0, posY = 0;
@@ -130,17 +184,16 @@ function initCursor() {
   });
 
   gsap.ticker.add(() => {
-    posX += (mouseX - posX) * 0.12;
-    posY += (mouseY - posY) * 0.12;
+    posX += (mouseX - posX) * 0.15;
+    posY += (mouseY - posY) * 0.15;
 
     follower.style.transform =
       `translate(${posX}px, ${posY}px) translate(-50%, -50%)`;
   });
 
   document.querySelectorAll("a, button, .product-card, .card").forEach(el => {
-
     el.addEventListener("mouseenter", () => {
-      follower.style.transform += " scale(1.6)";
+      follower.style.transform += " scale(1.5)";
     });
 
     el.addEventListener("mouseleave", () => {
@@ -149,3 +202,19 @@ function initCursor() {
     });
   });
 }
+window.addEventListener("load", () => {
+  if (gsap && ScrollTrigger) {
+    gsap.utils.toArray(".footer-card").forEach(card => {
+      gsap.from(card, {
+        opacity: 0,
+        y: 40,
+        duration: 0.8,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: card,
+          start: "top 90%"
+        }
+      });
+    });
+  }
+});
