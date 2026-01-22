@@ -692,3 +692,14 @@ footer {
     box-shadow: none;
   }
 }
+/* 🔥 FORCE POP HOVER ON DESKTOP ONLY */
+@media (hover: hover) and (pointer: fine) {
+  .product-card:hover {
+    transform: translateY(-12px) scale(1.05);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  }
+
+  .product-card:hover img {
+    transform: scale(1.06);
+  }
+}
