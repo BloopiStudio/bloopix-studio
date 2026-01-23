@@ -43,34 +43,55 @@
 
   <p class="shop-preview">Explore our designs — click to visit our shop.</p>
 
-  <div class="grid">
-    <!-- CARD 1 -->
-    <a href="shop.html" class="product-card-link">
-      <div class="product-card">
-        <img src="assets/images/Store/surf.png" alt="Surf More, Worry Less">
-        <h3>Surf More, Worry Less</h3>
-        <div class="view-btn">Visit Shop</div>
-      </div>
-    </a>
+  <div class="grid" id="featuredGrid">
 
-    <!-- CARD 2 -->
-    <a href="shop.html" class="product-card-link">
-      <div class="product-card">
-        <img src="assets/images/Store/free sprit.png" alt="Free Spirit Girl in Car">
-        <h3>Free Spirit Girl in Car</h3>
-        <div class="view-btn">Visit Shop</div>
-      </div>
-    </a>
+  <!-- CARD 1 -->
+  <a href="shop.html" class="product-card-link">
+    <div class="product-card">
+      <img src="assets/images/Store/surf.png">
+      <h3>Surf More, Worry Less</h3>
+      <div class="view-btn">Visit Shop</div>
+    </div>
+  </a>
 
-    <!-- CARD 3 -->
-    <a href="shop.html" class="product-card-link">
-      <div class="product-card">
-        <img src="assets/images/Store/oops.png" alt="Oops… Magic! – Cute Witch Aesthetic">
-        <h3>Oops… Magic! – Cute Witch Aesthetic</h3>
-        <div class="view-btn">Visit Shop</div>
-      </div>
-    </a>
-  </div>
+  <!-- CARD 2 -->
+  <a href="shop.html" class="product-card-link">
+    <div class="product-card">
+      <img src="assets/images/Store/free sprit.png">
+      <h3>Free Spirit Girl in Car</h3>
+      <div class="view-btn">Visit Shop</div>
+    </div>
+  </a>
+
+  <!-- CARD 3 -->
+  <a href="shop.html" class="product-card-link">
+    <div class="product-card">
+      <img src="assets/images/Store/oops.png">
+      <h3>Oops… Magic! – Cute Witch</h3>
+      <div class="view-btn">Visit Shop</div>
+    </div>
+  </a>
+
+  <!-- CARD 4 -->
+  <a href="shop.html" class="product-card-link">
+    <div class="product-card">
+      <img src="assets\images\Store\heart.png">
+      <h3>Soft Heart, Strong Mind – Emotional Resilience Art</h3>
+      <div class="view-btn">Visit Shop</div>
+    </div>
+  </a>
+
+  <!-- CARD 5 -->
+  <a href="shop.html" class="product-card-link">
+    <div class="product-card">
+      <img src="assets\images\Store\warning.png">
+      <h3>I’m Warning You – Cute Couple Chibi Art</h3>
+      <div class="view-btn">Visit Shop</div>
+    </div>
+  </a>
+
+</div>
+
 </section>
 
 
@@ -168,6 +189,26 @@
     if (window.initCursor) initCursor();
   }
 })();
+document.addEventListener("DOMContentLoaded", () => {
+  const grid = document.getElementById("featuredGrid");
+  if (!grid) return;
+
+  const cards = Array.from(grid.children);
+
+  // Shuffle
+  for (let i = cards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [cards[i], cards[j]] = [cards[j], cards[i]];
+  }
+
+  // Remove all
+  grid.innerHTML = "";
+
+  // Append only 3 random cards
+  cards.slice(0, 3).forEach(card => grid.appendChild(card));
+});
+
+
 </script>
 
 

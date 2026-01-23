@@ -239,3 +239,4 @@ if (window.innerWidth <= 480) {
 
     cards.forEach(card => observer.observe(card));
   }
+
